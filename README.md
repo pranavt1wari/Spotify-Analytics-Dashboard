@@ -1,7 +1,5 @@
-# Spotify Analytics Dashboard
+# Spotify Analytics Dashboard - Pranav Tiwari
 
-**DBMS Project** — Thapar Institute of Engineering & Technology  
-Pranav Tiwari (1024160127) · Vrishank Nehru (1024160109)
 
 ---
 
