@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}Spotify Analytics{% endblock %}</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root{--green:#1DB954;--dark:#121212;--card:#1e1e1e;--text:#fff;--muted:#b3b3b3}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--dark);color:var(--text);font-family:'Segoe UI',sans-serif;min-height:100vh}
+  nav{background:#000;padding:14px 32px;display:flex;align-items:center;gap:32px}
+  nav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:600;letter-spacing:.5px;transition:color .2s}
+  nav a:hover,nav a.active{color:var(--green)}
+  nav .logo{color:var(--green);font-size:18px;font-weight:700;margin-right:16px}
+  main{max-width:1100px;margin:40px auto;padding:0 24px}
+  h1{font-size:28px;margin-bottom:8px}
+  h2{font-size:20px;color:var(--green);margin:28px 0 12px}
+  .card{background:var(--card);border-radius:12px;padding:24px;margin-bottom:20px}
+  .form-row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;margin-bottom:8px}
+  label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+  select,input[type=date]{background:#2a2a2a;color:var(--text);border:1px solid #444;border-radius:8px;padding:10px 14px;font-size:14px;min-width:180px}
+  select:focus,input:focus{outline:none;border-color:var(--green)}
+  button{background:var(--green);color:#000;border:none;border-radius:24px;padding:11px 28px;font-weight:700;font-size:14px;cursor:pointer;transition:opacity .2s}
+  button:hover{opacity:.85}
+  .error{background:#3a1a1a;color:#f66;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:14px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{text-align:left;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.6px;padding:8px 12px;border-bottom:1px solid #333}
+  td{padding:10px 12px;border-bottom:1px solid #2a2a2a}
+  tr:last-child td{border-bottom:none}
+  .badge{display:inline-block;background:var(--green);color:#000;border-radius:20px;padding:4px 12px;font-weight:700;font-size:13px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .stat-num{font-size:36px;font-weight:700;color:var(--green)}
+  .stat-label{font-size:13px;color:var(--muted);margin-top:4px}
+  .stat-row{display:flex;gap:32px;flex-wrap:wrap;margin-bottom:8px}
+  canvas{max-height:260px}
+  @media(max-width:700px){.grid2{grid-template-columns:1fr}.form-row{flex-direction:column}}
+</style>
+</head>
+<body>
+<nav>
+  <span class="logo">♫ Spotify Analytics</span>
+  <a href="/" {% if request.endpoint=='index' %}class="active"{% endif %}>Home</a>
+  <a href="/wrapped" {% if request.endpoint=='wrapped' %}class="active"{% endif %}>Wrapped</a>
+  <a href="/blend" {% if request.endpoint=='blend' %}class="active"{% endif %}>Blend</a>
+  <a href="/percentile" {% if request.endpoint=='percentile' %}class="active"{% endif %}>Percentile</a>
+</nav>
+<main>
+{% block content %}{% endblock %}
+</main>
+</body>
+</html>

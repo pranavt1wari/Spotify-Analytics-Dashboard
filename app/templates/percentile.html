@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Percentile — Spotify Analytics{% endblock %}
+{% block content %}
+<h1>📊 Listener Percentile</h1>
+
+<div class="card">
+  <form method="POST" class="form-row">
+    <div>
+      <label>User</label>
+      <select name="user_id">
+        {% for u in users %}<option value="{{ u.user_id }}">{{ u.username }}</option>{% endfor %}
+      </select>
+    </div>
+    <div>
+      <label>Artist</label>
+      <select name="artist_id">
+        {% for a in artists %}<option value="{{ a.artist_id }}">{{ a.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <button type="submit">Get Ranking</button>
+  </form>
+</div>
+
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+{% if result %}
+<div class="card" style="text-align:center;padding:36px">
+  <div style="font-size:14px;color:var(--muted);margin-bottom:8px">{{ result.username }} listening to {{ result.artist_name }}</div>
+  <div style="font-size:56px;font-weight:700;color:var(--green)">{{ result.rank_str }}</div>
+  <div style="font-size:16px;color:var(--muted);margin-top:8px">Listener Rank</div>
+  <div style="margin-top:12px;font-size:14px;color:#888">{{ result.plays }} plays of this artist</div>
+</div>
+
+<div class="card">
+  <h2 style="margin-top:0">Listener Leaderboard — {{ result.artist_name }}</h2>
+  <table>
+    <tr><th>Rank</th><th>Username</th><th>Plays</th><th>Top %</th></tr>
+    {% for row in result.leaderboard %}
+    <tr {% if row.username == result.username %}style="background:#1a2e1a"{% endif %}>
+      <td style="color:var(--green);font-weight:700">{{ loop.index }}</td>
+      <td>{{ row.username }}{% if row.username == result.username %} ← you{% endif %}</td>
+      <td>{{ row.play_count }}</td>
+      <td>Top {{ row.top_pct }}%</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+{% endblock %}

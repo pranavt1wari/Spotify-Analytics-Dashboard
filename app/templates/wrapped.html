@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}Wrapped — Spotify Analytics{% endblock %}
+{% block content %}
+<h1>🎵 Spotify Wrapped</h1>
+
+<div class="card">
+  <form method="POST" class="form-row">
+    <div>
+      <label>User</label>
+      <select name="user_id">
+        {% for u in users %}<option value="{{ u.user_id }}">{{ u.username }}</option>{% endfor %}
+      </select>
+    </div>
+    <div>
+      <label>Start Date</label>
+      <input type="date" name="start_date" value="2025-01-01">
+    </div>
+    <div>
+      <label>End Date</label>
+      <input type="date" name="end_date" value="2025-12-31">
+    </div>
+    <button type="submit">Generate Wrapped</button>
+  </form>
+</div>
+
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+{% if result %}
+<h2>{{ result.username }}'s Wrapped — {{ result.start }} to {{ result.end }}</h2>
+
+<div class="stat-row">
+  <div>
+    <div class="stat-num">{{ result.summary.total_mins or 0 }}</div>
+    <div class="stat-label">Minutes Listened</div>
+  </div>
+  <div>
+    <div class="stat-num">{{ result.summary.total_plays or 0 }}</div>
+    <div class="stat-label">Total Plays</div>
+  </div>
+  <div>
+    <div class="stat-num">{{ result.summary.unique_songs or 0 }}</div>
+    <div class="stat-label">Unique Songs</div>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="card">
+    <h2 style="margin-top:0">Top 5 Songs</h2>
+    <table>
+      <tr><th>#</th><th>Song</th><th>Artist</th><th>Plays</th><th>Mins</th></tr>
+      {% for s in result.top_songs %}
+      <tr>
+        <td style="color:var(--green);font-weight:700">{{ loop.index }}</td>
+        <td>{{ s.song }}</td>
+        <td style="color:var(--muted)">{{ s.artist }}</td>
+        <td>{{ s.plays }}</td>
+        <td>{{ s.total_mins }}</td>
+      </tr>
+      {% else %}<tr><td colspan="5" style="color:var(--muted)">No data</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Top 5 Artists</h2>
+    <table>
+      <tr><th>#</th><th>Artist</th><th>Plays</th></tr>
+      {% for a in result.top_artists %}
+      <tr>
+        <td style="color:var(--green);font-weight:700">{{ loop.index }}</td>
+        <td>{{ a.artist }}</td>
+        <td>{{ a.plays }}</td>
+      </tr>
+      {% else %}<tr><td colspan="3" style="color:var(--muted)">No data</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="card">
+    <h2 style="margin-top:0">Top 5 Genres</h2>
+    <table>
+      <tr><th>#</th><th>Genre</th><th>Minutes</th></tr>
+      {% for g in result.top_genres %}
+      <tr>
+        <td style="color:var(--green);font-weight:700">{{ loop.index }}</td>
+        <td>{{ g.genre }}</td>
+        <td>{{ g.total_mins }}</td>
+      </tr>
+      {% else %}<tr><td colspan="3" style="color:var(--muted)">No data</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Peak Listening Hours</h2>
+    <canvas id="hourChart"></canvas>
+  </div>
+</div>
+
+<script>
+const hourLabels = [{% for h in result.hour_data %}"{{ h.hour_of_day|int }}h"{% if not loop.last %},{% endif %}{% endfor %}];
+const hourPlays  = [{% for h in result.hour_data %}{{ h.plays }}{% if not loop.last %},{% endif %}{% endfor %}];
+new Chart(document.getElementById('hourChart'), {
+  type: 'bar',
+  data: {
+    labels: hourLabels,
+    datasets: [{
+      label: 'Plays',
+      data: hourPlays,
+      backgroundColor: '#1DB954',
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { color: '#b3b3b3' }, grid: { color: '#2a2a2a' } },
+      y: { ticks: { color: '#b3b3b3' }, grid: { color: '#2a2a2a' } }
+    }
+  }
+});
+</script>
+{% endif %}
+{% endblock %}

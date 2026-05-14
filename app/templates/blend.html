@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Blend — Spotify Analytics{% endblock %}
+{% block content %}
+<h1>🤝 Blend</h1>
+
+<div class="card">
+  <form method="POST" class="form-row">
+    <div>
+      <label>User 1</label>
+      <select name="user1_id">
+        {% for u in users %}<option value="{{ u.user_id }}">{{ u.username }}</option>{% endfor %}
+      </select>
+    </div>
+    <div>
+      <label>User 2</label>
+      <select name="user2_id">
+        {% for u in users %}<option value="{{ u.user_id }}" {% if loop.index==2 %}selected{% endif %}>{{ u.username }}</option>{% endfor %}
+      </select>
+    </div>
+    <button type="submit">Calculate Blend</button>
+  </form>
+</div>
+
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+{% if result %}
+<div class="card" style="text-align:center;padding:36px">
+  <div style="font-size:14px;color:var(--muted);margin-bottom:8px">{{ result.u1_name }} &amp; {{ result.u2_name }}</div>
+  <div style="font-size:72px;font-weight:700;color:var(--green)">{{ result.score }}%</div>
+  <div style="font-size:16px;color:var(--muted);margin-top:8px">Compatibility Score</div>
+  <div style="margin-top:16px;font-size:13px;color:#888">
+    Artists (40%) · Songs (30%) · Genres (30%)
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="card">
+    <h2 style="margin-top:0">Common Artists ({{ result.common_artists|length }})</h2>
+    {% if result.common_artists %}
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      {% for a in result.common_artists %}<span class="badge">{{ a.name }}</span>{% endfor %}
+    </div>
+    {% else %}<p style="color:var(--muted)">No common artists.</p>{% endif %}
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Common Genres ({{ result.common_genres|length }})</h2>
+    {% if result.common_genres %}
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      {% for g in result.common_genres %}<span style="background:#2a2a2a;border-radius:20px;padding:4px 14px;font-size:13px">{{ g.name }}</span>{% endfor %}
+    </div>
+    {% else %}<p style="color:var(--muted)">No common genres.</p>{% endif %}
+  </div>
+</div>
+
+<div class="card">
+  <h2 style="margin-top:0">Common Songs ({{ result.common_songs|length }})</h2>
+  {% if result.common_songs %}
+  <table>
+    <tr><th>Song</th><th>Artist</th></tr>
+    {% for s in result.common_songs %}
+    <tr><td>{{ s.title }}</td><td style="color:var(--muted)">{{ s.artist }}</td></tr>
+    {% endfor %}
+  </table>
+  {% else %}<p style="color:var(--muted)">No common songs.</p>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

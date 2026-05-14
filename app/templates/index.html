@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Spotify Analytics Dashboard{% endblock %}
+{% block content %}
+<h1>Spotify Analytics Dashboard</h1>
+<p style="color:var(--muted);margin-top:8px;margin-bottom:32px">
+  A DBMS project demonstrating Wrapped, Blend, and Percentile features using Oracle SQL & PL/SQL.
+</p>
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+  <a href="/wrapped" style="text-decoration:none">
+    <div class="card" style="cursor:pointer;transition:transform .2s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+      <div style="font-size:36px;margin-bottom:12px">🎵</div>
+      <h2 style="margin:0 0 8px">Wrapped</h2>
+      <p style="color:var(--muted);font-size:14px">Generate your personalized year/month-in-review: top songs, artists, genres, listening time, and peak hours.</p>
+    </div>
+  </a>
+  <a href="/blend" style="text-decoration:none">
+    <div class="card" style="cursor:pointer;transition:transform .2s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+      <div style="font-size:36px;margin-bottom:12px">🤝</div>
+      <h2 style="margin:0 0 8px">Blend</h2>
+      <p style="color:var(--muted);font-size:14px">Compare two users' listening histories and compute a compatibility score based on shared artists, songs, and genres.</p>
+    </div>
+  </a>
+  <a href="/percentile" style="text-decoration:none">
+    <div class="card" style="cursor:pointer;transition:transform .2s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+      <div style="font-size:36px;margin-bottom:12px">📊</div>
+      <h2 style="margin:0 0 8px">Percentile</h2>
+      <p style="color:var(--muted);font-size:14px">Find out where a user ranks among all listeners for a given artist — "You are in the Top X%".</p>
+    </div>
+  </a>
+</div>
+
+<div class="card" style="margin-top:24px">
+  <h2 style="margin-top:0">Users in the system</h2>
+  <div style="display:flex;flex-wrap:wrap;gap:10px">
+    {% for u in users %}
+    <span style="background:#2a2a2a;border-radius:20px;padding:6px 16px;font-size:13px">{{ u.username }}</span>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
